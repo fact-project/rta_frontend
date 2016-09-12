@@ -101,25 +101,32 @@ function init() {
 
     var binning = 20;
 
-    var data = _.map(_.range(10), function(v) {
-        var value = {"signalEvents":Math.floor(Math.random()*15),"backgroundEvents":Math.floor(Math.random()*10),};
+    $.getJSON('/lightcurve', function (lightcurve) {
+        if (lightcurve != null ) {
+            console.log(lightcurve)
+        }
+    });
+
+    var lightCurveData = _.map(_.range(10), function(v) {
+        var value = {"signalEvents":Math.floor(Math.random()*15),"backgroundEvents":Math.floor(Math.random()*10)};
         var date = d3.time.minute.offset(new Date(), -(v*binning + Math.random()));
         var alpha = 1.0 / 5.0;
         var excess = value.signalEvents - value.backgroundEvents * alpha;
         var lower = excess - Math.sqrt(value.signalEvents + value.backgroundEvents * alpha) * 0.5;
         var upper = excess + Math.sqrt(value.signalEvents + value.backgroundEvents * alpha) * 0.5;
+        var source = "agn awesome source";
         return {
             "date":date,
             "excess": excess,
             "lower": lower,
             "upper": upper,
             "signal": value.signalEvents,
-            "background": value.backgroundEvents
+            "background": value.backgroundEvents,
+            "source": source
         };
     });
 
-    var l = new LightCurve('#lightcurve', data, binning);
-
+    var l = new LightCurve('#lightcurve', lightCurveData, binning);
 
     var p;
     var latestTimeStamp;
@@ -158,15 +165,14 @@ function init() {
             });
         }
     }, 4*SECONDS);
-    //
 
 
     loadSkyCamImage();
     window.setInterval(loadSkyCamImage, 5*MINUTES);
-    //
+
     loadEvent();
     window.setInterval(loadEvent, 15*SECONDS);
-    //
+
     //MemoryChart();
     //window.setInterval(MemoryChart.load, 30*SECONDS);
 }

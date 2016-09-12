@@ -118,7 +118,12 @@ function LightCurve(parentID, data, binning) {
             tooltip.transition()
                 .duration(300)
                 .style("opacity", .9);
-            tooltip.html("<h1>" + "Excess: " + numeral(d.excess).format('0.00') + "</h1>" + "Signal: " + (d.signal) + "<br/>" + "Background: " + (d.background))
+            tooltip.html(
+                "<h1>" + "Excess: " + numeral(d.excess).format('0.00') + "</h1>"
+                    + "Signal: " + (d.signal) + "<br/>"
+                    + "Background: " + (d.background) +"<br/>"
+                    + "Source: " + (d.source)
+                )
                 .style("left", (x + 50) + "px")
                 .style("top", (y) + "px");
         })

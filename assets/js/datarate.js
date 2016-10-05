@@ -41,10 +41,11 @@ function DataRatePlot(parentID, data, radius=3, duration=900){
     //gray background
     svg.append("rect")
         .style("fill", "#f8f8f8")
-        .attr("x", x(earliestDate))
-        .attr("y", y(100))
-        .attr("width", x(latestDate) - x(earliestDate))
-        .attr("height", y(0) - y(100));
+        // .attr("x", x(earliestDate))
+        // .attr("y", y(100))
+        .attr("width", width - margin.right - margin.left)
+        .attr("height", height - margin.top - margin.bottom)
+        .attr('transform', 'translate(0, 0)');
 
     svg.append("text")
         .attr("text-anchor", "middle")
@@ -94,7 +95,7 @@ function DataRatePlot(parentID, data, radius=3, duration=900){
     svg.select(".x.axis")
         .transition()
         .duration(duration)
-        .call(xAxis)
+        .call(xAxis);
 
     svg.select(".x.axis")
         .selectAll("text")
@@ -104,20 +105,6 @@ function DataRatePlot(parentID, data, radius=3, duration=900){
         .attr("transform", function(d) {
             return "rotate(-40)"
         });
-
-    //  console.log(rate_tuples.length)
-    //  rate_tuples = _.concat(new_tuples, rate_tuples);
-    //	rate_tuples = _.take(rate_tuples,30);
-    //  console.log(rate_tuples.length)
-    /*
-     var dates = _.map(rate_tuples, 'date');
-     var diff = x(a.date) - x(d3.max(dates));
-     console.log(diff);
-     console.log(a.date);
-     console.log(d3.max(dates));
-     rate_tuples.push(a);
-     rate_tuples.shift();
-     */
 
     this.update = function updateDataRatePlot(newData, limit=100){
         if (data.length > limit){

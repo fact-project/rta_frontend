@@ -65,11 +65,12 @@ MINUTES = 60*SECONDS;
 $(document).ready(init);
 
 function init() {
-    //initialize the hex display
-    var parentID = 'fact_map';
-    var size = 450;
-    var radius = 5;
-    var camera = new Hexmap(parentID, size, radius);
+
+    var dateFormatter = d3.time.format("%Y-%m-%dT%H:%M:%S.%L");
+
+    var camera   = new Hexmap('fact_map', 450, 5);
+    // var bullet   = new BulletPlot('#memory_chart', data=[]);
+    var ratePlot = new DataRatePlot('#datarate_chart', data=[], radius=3);
 
     function loadSkyCamImage() {
         console.log("loading allskycam iamge");
@@ -97,6 +98,20 @@ function init() {
         });
     }
 
+
+    function loadMachineStatus() {
+        console.log("loading Machine Status");
+
+        $.getJSON('/status', function (status) {
+            if (status) {
+                console.log(status);
+                // bullet.update(status.photonCharges, duration = 2.0);
+                $('#space').html(numeral(status.freeSpace / (1024*1024*1024)).format('0.00'));
+                $('#memory').html(numeral(status.usedMemory/ (1024*1024)).format('0.00'));
+                $('#cpus').html(numeral(status.availableProcessors).format('0'));
+            }
+        });
+    }
 
 
     var binning = 20;
@@ -128,52 +143,55 @@ function init() {
 
     var l = new LightCurve('#lightcurve', lightCurveData, binning);
 
-    var p;
+    // var p;
+    // var latestTimeStamp;
+    // var formatter = d3.time.format("%Y-%m-%dT%H:%M:%S.%L");
+    //
+    // $.getJSON('/datarate', function (rates) {
+    //     if (rates != null ) {
+    //         rates = _.map(rates, function(a){
+    //             a.date = formatter.parse(a.date);
+    //             return a;
+    //         });
+    //         latestTimeStamp = _.maxBy(rates, 'date').date;
+    //         console.log(latestTimeStamp);
+    //         p = new DataRatePlot('#datarate_chart', rates, radius=3);
+    //         //$('#lightcurve').html(excess);
+    //     }
+    // });
+
+
+
     var latestTimeStamp;
-    var formatter = d3.time.format("%Y-%m-%dT%H:%M:%S.%L");
-
-    $.getJSON('/datarate', function (rates) {
-        if (rates != null ) {
-            rates = _.map(rates, function(a){
-                a.date = formatter.parse(a.date);
-                return a;
-            });
-            latestTimeStamp = _.maxBy(rates, 'date').date;
-            console.log(latestTimeStamp);
-            p = new DataRatePlot('#datarate_chart', rates, radius=2);
-            //$('#lightcurve').html(excess);
-        }
-    });
-
-
-
-
     window.setInterval(function(){
-        if (p){
-            $.getJSON('/datarate?timestamp='+formatter(latestTimeStamp), function (rates) {
-                if (rates != null ) {
+        if (ratePlot){
+            var query = '/datarate';
+            if(latestTimeStamp){
+                query = '/datarate?timestamp='+dateFormatter(latestTimeStamp);
+            }
+            $.getJSON(query, function (rates) {
+                if (rates != null) {
 
                     rates = _.map(rates, function(a){
-                        a.date = formatter.parse(a.date);
+                        a.date = dateFormatter.parse(a.date);
                         return a;
                     });
                     latestTimeStamp = _.maxBy(rates, 'date').date;
                     console.log(latestTimeStamp);
-                    p.update(rates);
-                    //$('#lightcurve').html(excess);
+                    ratePlot.update(rates);
                 }
             });
         }
-    }, 4*SECONDS);
+    }, 10*SECONDS);
 
 
     loadSkyCamImage();
     window.setInterval(loadSkyCamImage, 5*MINUTES);
 
     loadEvent();
-    window.setInterval(loadEvent, 15*SECONDS);
+    window.setInterval(loadEvent, 7*SECONDS);
 
-    //MemoryChart();
-    //window.setInterval(MemoryChart.load, 30*SECONDS);
+
+    window.setInterval(loadMachineStatus, 30*SECONDS);
 }
 

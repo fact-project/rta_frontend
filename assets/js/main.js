@@ -66,7 +66,7 @@ $(document).ready(init);
 
 function init() {
 
-    var dateFormatter = d3.time.format("%Y-%m-%dT%H:%M:%S.%L");
+    var iso = d3.time.format.iso;
 
     var camera   = new Hexmap('fact_map', 450, 5);
     // var bullet   = new BulletPlot('#memory_chart', data=[]);
@@ -122,43 +122,43 @@ function init() {
         }
     });
 
-    var lightCurveData = _.map(_.range(10), function(v) {
-        var value = {"signalEvents":Math.floor(Math.random()*15),"backgroundEvents":Math.floor(Math.random()*10)};
-        var date = d3.time.minute.offset(new Date(), -(v*binning + Math.random()));
-        var alpha = 1.0 / 5.0;
-        var excess = value.signalEvents - value.backgroundEvents * alpha;
-        var lower = excess - Math.sqrt(value.signalEvents + value.backgroundEvents * alpha) * 0.5;
-        var upper = excess + Math.sqrt(value.signalEvents + value.backgroundEvents * alpha) * 0.5;
-        var source = "agn awesome source";
-        return {
-            "date":date,
-            "excess": excess,
-            "lower": lower,
-            "upper": upper,
-            "signal": value.signalEvents,
-            "background": value.backgroundEvents,
-            "source": source
-        };
-    });
-
-    var l = new LightCurve('#lightcurve', lightCurveData, binning);
+    // var l = new LightCurve('#lightcurve', lightCurveData, binning);
+    // var data = _.map(lc.bins, function(b){
+        //
+        //         var value = {"signalEvents":Math.floor(Math.random()*15),"backgroundEvents":Math.floor(Math.random()*10)};
+        //         var date = d3.time.minute.offset(new Date(), -(v*binning + Math.random()));
+        //         var alpha = 1.0 / 5.0;
+        //         var excess = value.signalEvents - value.backgroundEvents * alpha;
+        //         var lower = excess - Math.sqrt(value.signalEvents + value.backgroundEvents * alpha) * 0.5;
+        //         var upper = excess + Math.sqrt(value.signalEvents + value.backgroundEvents * alpha) * 0.5;
+        //         var source = "agn awesome source";
+        //         return {
+        //             "date":date,
+        //             "excess": excess,
+        //             "lower": lower,
+        //             "upper": upper,
+        //             "signal": value.signalEvents,
+        //             "background": value.backgroundEvents,
+        //             "source": source
+        //         };
+        //     });
 
     // var p;
     // var latestTimeStamp;
     // var formatter = d3.time.format("%Y-%m-%dT%H:%M:%S.%L");
-    //
-    // $.getJSON('/datarate', function (rates) {
-    //     if (rates != null ) {
-    //         rates = _.map(rates, function(a){
-    //             a.date = formatter.parse(a.date);
-    //             return a;
-    //         });
-    //         latestTimeStamp = _.maxBy(rates, 'date').date;
-    //         console.log(latestTimeStamp);
-    //         p = new DataRatePlot('#datarate_chart', rates, radius=3);
-    //         //$('#lightcurve').html(excess);
-    //     }
-    // });
+
+    $.getJSON('/lightcurve', function (lc) {
+        if(lc){
+            lc.bins = _.map(lc.bins, function(b){
+                b.endTime = iso.parse(b.endTime);
+                b.startTime= iso.parse(b.startTime);
+                b.lower = b.excess - Math.sqrt(b.excess) * 0.5;
+                b.upper = b.excess + Math.sqrt(b.excess) * 0.5;
+                return b
+            });
+            var l = new LightCurve('#lightcurve', lc);
+        }
+    });
 
 
 
@@ -167,13 +167,13 @@ function init() {
         if (ratePlot){
             var query = '/datarate';
             if(latestTimeStamp){
-                query = '/datarate?timestamp='+dateFormatter(latestTimeStamp);
+                query = '/datarate?timestamp='+iso(latestTimeStamp);
             }
             $.getJSON(query, function (rates) {
                 if (rates != null) {
 
                     rates = _.map(rates, function(a){
-                        a.date = dateFormatter.parse(a.date);
+                        a.date = iso.parse(a.date);
                         return a;
                     });
                     latestTimeStamp = _.maxBy(rates, 'date').date;

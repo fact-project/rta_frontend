@@ -33,6 +33,12 @@
     margin: 0;
 }
 
+.figure path {
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none;
+}
+
 /*all plots*/
 .axis line,
 .axis path {

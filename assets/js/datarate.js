@@ -175,23 +175,4 @@ function DataRatePlot(parentID, data, radius=3, duration=900){
 }
 
 module.exports = DataRatePlot;
-//
-//var getRandomData = function(N) {
-//    var data = [];
-//    for (var i = 1; i < N + 1; i++) {
-//        data.push({
-//            "date": moment().subtract(i, 'seconds').toDate(),
-//            "rate": Math.random()*10 + 80,
-//        });
-//    }
-//    return _.reverse(data);
-//}
-//
-//var asdf = getRandomData(100)
-//console.log(asdf)
-//
-//this.p =  new DataRatePlot('#chart', asdf, radius=2);
-//window.setInterval(function(){
-//    var data = getRandomData(2);
-//    this.p.update(data)
-//}, 3000);
+

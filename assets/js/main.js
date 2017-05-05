@@ -4,58 +4,17 @@
 	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
 */
 
-//
 const $ = require('zeptojs');
 const Hexmap = require('hexmap');
 const numeral = require('numeral');
 const _ = require('lodash');
 const d3 = require('d3');
-const LinePlot = require('./systemstatus.js');
+const LinePlot = require('./lineplot.js');
 const DataRatePlot = require('./datarate.js');
-// const LightCurve = require('./lightcurve.js');
 
-
-//(function($) {
-//
-//	skel.breakpoints({
-//		xlarge:	'(max-width: 1680px)',
-//		large:	'(max-width: 1280px)',
-//		medium:	'(max-width: 980px)',
-//		small:	'(max-width: 736px)',
-//		xsmall:	'(max-width: 480px)'
-//	});
-//
-//	$(function() {
-//
-//		var	$window = $(window),
-//			$body = $('body');
-//
-//		// Disable animations/transitions until the page has loaded.
-//			$body.addClass('is-loading');
-//
-//			$window.on('load', function() {
-//				window.setTimeout(function() {
-//					$body.removeClass('is-loading');
-//				}, 100);
-//			});
-//
-//		// Fix: Placeholder polyfill.
-//			$('form').placeholder();
-//
-//		// Prioritize "important" elements on medium.
-//			skel.on('+medium -medium', function() {
-//				$.prioritize(
-//					'.important\\28 medium\\29',
-//					skel.breakpoint('medium').active
-//				);
-//			});
-//
-//	});
-//
-//})(jQuery);
 
 /*
-FACT RTA stuff
+ * FACT RTA stuff
  */
 
 SECONDS = 1000;
@@ -130,91 +89,9 @@ function init() {
     };
 
 
-    // function loadEvent() {
-    //     console.log("loading Event");
-    //
-    //     $.getJSON('/event', function (latestEvent) {
-    //         if (latestEvent) {
-    //             camera.update(latestEvent.photonCharges, duration = 2.0);
-    //             $('#source_name').html(latestEvent.sourceName);
-    //             $('#eventTimeStamp').html(latestEvent.eventTimeStamp);
-    //             $('#size').html(numeral(latestEvent.size).format('0.00'));
-    //             $('#energy').html(numeral(latestEvent.estimatedEnergy).format('0.00'));
-    //             $('#theta_square').html(numeral(latestEvent.thetaSquare).format('0.000'));
-    //         }
-    //     });
-    // }
-    //
-    //
-    // function loadMachineStatus() {
-    //     console.log("loading Machine Status");
-    //
-    //     $.getJSON('/status', function (status) {
-    //         if (status) {
-    //             console.log(status);
-    //             // bullet.update(status.photonCharges, duration = 2.0);
-    //             $('#space').html(numeral(status.freeSpace / (1024*1024*1024)).format('0.00'));
-    //             $('#memory').html(numeral(status.usedMemory/ (1024*1024)).format('0.00'));
-    //             $('#cpus').html(numeral(status.availableProcessors).format('0'));
-    //         }
-    //     });
-    // }
 
+    loadSkyCamImage();
+    window.setInterval(loadSkyCamImage, 5*MINUTES);
 
-    // var binning = 20;
-    //
-    // $.getJSON('/lightcurve', function (lightcurve) {
-    //     if (lightcurve != null ) {
-    //         console.log(lightcurve)
-    //     }
-    // });
-    //
-    //
-    // $.getJSON('/lightcurve', function (lc) {
-    //     if(lc){
-    //         lc.bins = _.map(lc.bins, function(b){
-    //             b.endTime = iso.parse(b.endTime);
-    //             b.startTime= iso.parse(b.startTime);
-    //             b.lower = b.excess - Math.sqrt(b.excess) * 0.5;
-    //             b.upper = b.excess + Math.sqrt(b.excess) * 0.5;
-    //             return b
-    //         });
-    //         var l = new LightCurve('#lightcurve', lc);
-    //     }
-    // });
-
-
-
-    // var latestTimeStamp;
-    // window.setInterval(function(){
-    //     if (ratePlot){
-    //         var query = '/datarate';
-    //         if(latestTimeStamp){
-    //             query = '/datarate?timestamp='+iso(latestTimeStamp);
-    //         }
-    //         $.getJSON(query, function (rates) {
-    //             if (rates != null) {
-    //
-    //                 rates = _.map(rates, function(a){
-    //                     a.date = iso.parse(a.date);
-    //                     return a;
-    //                 });
-    //                 latestTimeStamp = _.maxBy(rates, 'date').date;
-    //                 console.log(latestTimeStamp);
-    //                 ratePlot.update(rates);
-    //             }
-    //         });
-    //     }
-    // }, 10*SECONDS);
-    //
-    //
-    // loadSkyCamImage();
-    // window.setInterval(loadSkyCamImage, 5*MINUTES);
-    //
-    // loadEvent();
-    // window.setInterval(loadEvent, 7*SECONDS);
-    //
-    //
-    // window.setInterval(loadMachineStatus, 30*SECONDS);
 }
 

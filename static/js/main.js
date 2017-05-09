@@ -94,4 +94,3 @@ function init() {
     window.setInterval(loadSkyCamImage, 5*MINUTES);
 
 }
-

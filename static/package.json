@@ -6,7 +6,7 @@
   "dependencies": {
     "zeptojs":"^1.1.4",
     "numeral":"^1.5.3",
-    "hexmap" : "https://github.com/mackaiver/hexmap",
+    "hexmap" : "https://github.com/mackaiver/hexmap#v0.2.0",
     "d3-time": "^0.2.5",
     "lodash" : "4.13.1"
   },

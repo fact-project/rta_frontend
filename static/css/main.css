@@ -7,6 +7,28 @@ a {
     color:#888888;
 }
 
+#status_display p{
+  color: #f69025
+}
+
+#status_display.offline:after{
+  font-family: FontAwesome;
+  vertical-align: middle;
+  content: "\f188";
+  padding-left: 1em;
+  font-size: 18pt;
+  color: red;
+}
+
+#status_display.online:after{
+  font-family: FontAwesome;
+  vertical-align: middle;
+  content: "\f00c";
+  padding-left: 1em;
+  font-size: 18pt;
+  color: green;
+}
+
 #intro {
     background-color: white;
     padding-top: 8em;

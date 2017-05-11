@@ -1,4 +1,4 @@
-build_js/
+./static/build/*
 # Logs
 logs
 *.log

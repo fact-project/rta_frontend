@@ -7,17 +7,19 @@ a {
     color:#888888;
 }
 
-#status_display p{
-  color: #f69025
-}
 
 #status_display.offline:after{
   font-family: FontAwesome;
   vertical-align: middle;
   content: "\f188";
   padding-left: 1em;
-  font-size: 18pt;
+  font-size: 12pt;
   color: red;
+}
+
+#status_display i.fa-spin {
+    font-size: 12pt;
+    transform-origin: 35% 49%;
 }
 
 #status_display.online:after{
@@ -25,7 +27,7 @@ a {
   vertical-align: middle;
   content: "\f00c";
   padding-left: 1em;
-  font-size: 18pt;
+  font-size: 12pt;
   color: green;
 }
 
@@ -60,7 +62,7 @@ a {
 
 .figure path {
     stroke: steelblue;
-    stroke-width: 2;
+    stroke-width: 1;
     fill: none;
 }
 
@@ -85,10 +87,6 @@ a {
     font-size: 8pt;
 }
 
-/*other stuff*/
-.chart {
-	margin: 20px 20px 15px 5px;
-}
 
 #fact_map {
 	margin-left:4em;
@@ -135,7 +133,7 @@ section {
 
 #footer {
 	color:#bbbbbb;
-    size: 6pt;
+  size: 6pt;
 	background-color:#444;
 	margin-left:2em;
 	padding:0;

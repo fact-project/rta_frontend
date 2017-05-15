@@ -3,7 +3,7 @@ const _ = require('lodash');
 
 function LinePlot(parentID, data, width=600, height=320, color="steelblue", label="y-label"){
     // Set the dimensions of the canvas / graph
-    var margin = {top: 20, right: 5, bottom: 20, left: 30},
+    var margin = {top: 15, right:0, bottom: 20, left: 40},
         width = width - margin.left - margin.right,
         height = height - margin.top - margin.bottom;
 
@@ -64,13 +64,6 @@ function LinePlot(parentID, data, width=600, height=320, color="steelblue", labe
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis);
-
-    svg.select(".x.axis")
-    .selectAll("text")
-    .style("text-anchor", "end")
-    .attr("dx", "-.8em")
-    .attr("dy", ".15em")
-    .attr("transform", "rotate(-40)");
 
     // Add the Y Axis
     svg.append("g")

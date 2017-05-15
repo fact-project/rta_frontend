@@ -11,6 +11,7 @@ const _ = require('lodash');
 const d3 = require('d3');
 const LinePlot = require('./lineplot.js');
 const DataRatePlot = require('./datarate.js');
+const LightCurvePlot = require('./lightcurve.js');
 
 
 /*
@@ -31,9 +32,10 @@ function init() {
     var utc = d3.time.format.utc;
 
     var camera   = new Hexmap('fact_map', 450, 5);
-    var memPlot = new LinePlot('#memory_chart', data=[], width=280, height=250, color='red', label='Used Memory in MB');
-    var loadPlot = new LinePlot('#load_chart', data=[], width=280, height=250, color='orange', label='Average Load');
+    var memPlot = new LinePlot('#memory_chart', data=[], width=300, height=260, color='red', label='Used Memory in MB');
+    var loadPlot = new LinePlot('#load_chart', data=[], width=300, height=260, color='orange', label='Average Load');
     var ratePlot = new DataRatePlot('#datarate_chart', data=[], radius=3);
+
     var webSocket = new WebSocket("ws://" + RTA_ADDRESS + "/rta");
 
     function loadSkyCamImage() {
@@ -111,4 +113,11 @@ function init() {
     setTimeout(check_rta_status, 2000)
     window.setInterval(check_rta_status, 1*MINUTES);
 
+    var lightcurve = [
+        {'startTime':iso.parse('2013-11-09 01:08:54'), 'excess': 0.8, 'excess_error':0.919804, 'significance': 0.5, 'endTime': iso.parse('2013-11-09 01:13:58')},
+        {'startTime':iso.parse('2013-11-09 01:14:54'), 'excess': 2.8, 'excess_error':1.919804, 'significance': 0.5, 'endTime': iso.parse('2013-11-09 01:19:58')},
+        {'startTime':iso.parse('2013-11-09 01:20:54'), 'excess': 2.8, 'excess_error':1.919804, 'significance': 0.5, 'endTime': iso.parse('2013-11-09 01:24:58')}
+      ]
+
+    var excessPlot = new LightCurvePlot('#lightcurve', lightcurve)
 }

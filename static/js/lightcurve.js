@@ -5,17 +5,14 @@ const d3_time = require('d3-time');
 
 function LightCurve(parentID, lightcurve) {
 
-    var bins = lightcurve.bins;
-    var alpha = lightcurve.alpha;
-    var binning = lightcurve.binningInMinutes;
+    var bins = lightcurve;
+    var alpha = 0.2;
+    var binning = 5;
 
     var startDates = _.map(bins, 'startTime');
     var endDates = _.map(bins, 'endTime');
 
-    var excess = _.map(bins, function(b){
-            return b.signalEvents - b.backgroundEvents * alpha;
-        }
-    );
+    var excess = _.map(bins, 'excess')
 
 
     var numberOfBars = bins.length;
@@ -159,7 +156,7 @@ function LightCurve(parentID, lightcurve) {
             return x(d.startTime) + (barWidth - errorBarWidth) / 2;
         })
         .attr('y', function(d) {
-            return y(d.lower) - 0.5 * barHeight
+            return y(d.excess - d.excess_error) - 0.5 * barHeight
         })
         .attr('width', function(d){
             return (x(d.endTime) - x(d.startTime))*0.6;
@@ -174,7 +171,7 @@ function LightCurve(parentID, lightcurve) {
             return x(d.startTime) + (barWidth - errorBarWidth) / 2;
         })
         .attr('y', function(d) {
-            return y(d.upper) - 0.5 * barHeight
+            return y(d.excess + d.excess_error) - 0.5 * barHeight
         })
         .attr('width', function(d){
             var barWidth = (x(d.endTime) - x(d.startTime));
@@ -190,14 +187,14 @@ function LightCurve(parentID, lightcurve) {
             return x(d.startTime) + barWidth / 2;
         })
         .attr('y1', function(d) {
-            return y(d.upper) - 0.5 * barHeight
+            return y(d.excess + d.excess_error) - 0.5 * barHeight
         })
         .attr('x2', function(d) {
             var barWidth = (x(d.endTime) - x(d.startTime));
             return x(d.startTime) + barWidth / 2;
         })
         .attr('y2', function(d) {
-            return y(d.lower) - 0.5 * barHeight
+            return y(d.excess - d.excess_error) - 0.5 * barHeight
         });
 
     svg.append('g')

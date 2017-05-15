@@ -5,13 +5,13 @@ function DataRatePlot(parentID, data, radius=3, duration=900){
 
     this.data = data;
     var margin = {
-            top: 40,
-            right: 40,
+            top: 15,
+            right: 0,
             bottom: 40,
             left: 40
         },
-        width = 600,
-        height = 400;
+        width = 650,
+        height = 380;
 
     var dates = _.map(data, 'date');
     var earliestDate = d3.min(dates);
@@ -175,4 +175,3 @@ function DataRatePlot(parentID, data, radius=3, duration=900){
 }
 
 module.exports = DataRatePlot;
-

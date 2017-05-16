@@ -1,9 +1,8 @@
 /*
-	Prism by TEMPLATED
-	templated.co @templatedco
-	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
-*/
+	FACT RTA Frontend 2017
 
+  written by K.Bruegge. He knows nothing of JavaScript.
+*/
 const $ = require('zeptojs');
 const Hexmap = require('hexmap');
 const numeral = require('numeral');
@@ -12,11 +11,6 @@ const d3 = require('d3');
 const LinePlot = require('./lineplot.js');
 const DataRatePlot = require('./datarate.js');
 const LightCurvePlot = require('./lightcurve.js');
-
-
-/*
- * FACT RTA stuff
- */
 
 SECONDS = 1000;
 MINUTES = 60*SECONDS;
@@ -46,6 +40,20 @@ function init() {
             d = new Date();
             $("#allskycam").attr("src", "http://www.gtc.iac.es/multimedia/netcam/camaraAllSky.jpg?" + d.getTime());
         }, 4000);
+    }
+
+    function get_excess() {
+      var jqxhr = $.getJSON( "/excess", function(data) {
+        console.log( "success" );
+        _.map(data, function (d){
+          d.bin_start = iso.parse(d.bin_start)
+          d.bin_end = iso.parse(d.bin_end)
+          return d
+        })
+        console.log( data );
+        $("#lightcurve .placeholder").css( "display", "none" )
+        var excessPlot = new LightCurvePlot('#lightcurve', data)
+      })
     }
 
     function check_rta_status(){
@@ -113,11 +121,6 @@ function init() {
     setTimeout(check_rta_status, 2000)
     window.setInterval(check_rta_status, 1*MINUTES);
 
-    var lightcurve = [
-        {'startTime':iso.parse('2013-11-09 01:08:54'), 'excess': 0.8, 'excess_error':0.919804, 'significance': 0.5, 'endTime': iso.parse('2013-11-09 01:13:58')},
-        {'startTime':iso.parse('2013-11-09 01:14:54'), 'excess': 2.8, 'excess_error':1.919804, 'significance': 0.5, 'endTime': iso.parse('2013-11-09 01:19:58')},
-        {'startTime':iso.parse('2013-11-09 01:20:54'), 'excess': 2.8, 'excess_error':1.919804, 'significance': 0.5, 'endTime': iso.parse('2013-11-09 01:24:58')}
-      ]
-
-    var excessPlot = new LightCurvePlot('#lightcurve', lightcurve)
+    get_excess()
+    window.setInterval(get_excess, 5*MINUTES);
 }

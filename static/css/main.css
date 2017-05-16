@@ -7,6 +7,16 @@ a {
     color:#888888;
 }
 
+rect.plot.background{
+  fill:#f8f8f8
+}
+
+#lightcurve .placeholder{
+  display:block;
+  width: 630px;
+  height: 380px;
+  margin:15 0 40 40;
+}
 
 #status_display.offline:after{
   font-family: FontAwesome;

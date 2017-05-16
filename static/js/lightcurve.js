@@ -9,21 +9,21 @@ function LightCurve(parentID, lightcurve) {
     var alpha = 0.2;
     var binning = 5;
 
-    var startDates = _.map(bins, 'startTime');
-    var endDates = _.map(bins, 'endTime');
+    var startDates = _.map(bins, 'bin_start');
+    var endDates = _.map(bins, 'bin_end');
 
-    var excess = _.map(bins, 'excess')
+    var excess = _.map(bins, 'excess_rate_per_h')
 
 
     var numberOfBars = bins.length;
     var margin = {
-            top: 40,
-            right: 40,
+            top: 15,
+            right: 0,
             bottom: 40,
             left: 40
         },
-        width = 600,
-        height = 400;
+        width = 650,
+        height = 380;
 
 
     var domainWidth = width - margin.left - margin.right;
@@ -48,13 +48,9 @@ function LightCurve(parentID, lightcurve) {
         .rangeRound([0, width - margin.left - margin.right]);
 
     var y = d3.scale.linear()
-        .domain([minExcess - 5, maxExcess + 3])
+        .domain([minExcess - 4, maxExcess + 4])
         .range([height - margin.top - margin.bottom, 0]);
 
-    //
-    // function barWidthForBin(bin){
-    //     ;
-    // }
 
     var xAxis = d3.svg.axis()
         .scale(x)
@@ -63,9 +59,9 @@ function LightCurve(parentID, lightcurve) {
         .tickSize(6)
         .tickPadding(5);
 
-    var tooltip = d3.select(parentID).append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0.0);
+    // var tooltip = d3.select(parentID).append("div")
+    //     .attr("class", "tooltip")
+    //     .style("opacity", 0.0);
 
     var yAxis = d3.svg.axis()
         .scale(y)
@@ -80,15 +76,12 @@ function LightCurve(parentID, lightcurve) {
         .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
 
 
-
-    // make gray background rectangle
+    //gray background
     svg.append("rect")
-        .style("fill", "#f8f8f8")
-        .attr("x", x(earliestDate))
-        .attr("y", y(maxExcess + 4))
-        .attr("width", domainWidth)
-        .attr("height", y(minExcess - 5) + Math.abs(y(maxExcess + 4)));
-
+        .attr("class", "plot background")
+        .attr("width", width - margin.right - margin.left)
+        .attr("height", height - margin.top - margin.bottom)
+        .attr('transform', 'translate(0, 0)');
 
     svg.append("text")
         .attr("text-anchor", "middle")
@@ -102,13 +95,13 @@ function LightCurve(parentID, lightcurve) {
     selectedData.append('rect')
         .attr('class', 'bar')
         .attr('x', function(d) {
-            return x(d.startTime);
+            return x(d.bin_start);
         })
         .attr('y', function(d) {
-            return y(d.excess) - 0.5 * barHeight
+            return y(d.excess_rate_per_h) - 0.5 * barHeight
         })
         .attr('width', function(d){
-            return x(d.endTime) - x(d.startTime)
+            return x(d.bin_end) - x(d.bin_start)
         })
         .attr('height', barHeight);
 
@@ -151,30 +144,30 @@ function LightCurve(parentID, lightcurve) {
     selectedData.append('rect')
         .attr('class', 'error')
         .attr('x', function(d) {
-            var barWidth = (x(d.endTime) - x(d.startTime));
+            var barWidth = (x(d.bin_end) - x(d.bin_start));
             var errorBarWidth = barWidth*0.6;
-            return x(d.startTime) + (barWidth - errorBarWidth) / 2;
+            return x(d.bin_start) + (barWidth - errorBarWidth) / 2;
         })
         .attr('y', function(d) {
-            return y(d.excess - d.excess_error) - 0.5 * barHeight
+            return y(d.excess_rate_per_h - d.excess_rate_err) - 0.5 * barHeight
         })
         .attr('width', function(d){
-            return (x(d.endTime) - x(d.startTime))*0.6;
+            return (x(d.bin_end) - x(d.bin_start))*0.6;
         })
         .attr('height', errorBarHeight);
 
     selectedData.append('rect')
         .attr('class', 'error')
         .attr('x', function(d) {
-            var barWidth = (x(d.endTime) - x(d.startTime));
+            var barWidth = (x(d.bin_end) - x(d.bin_start));
             var errorBarWidth = barWidth*0.6;
-            return x(d.startTime) + (barWidth - errorBarWidth) / 2;
+            return x(d.bin_start) + (barWidth - errorBarWidth) / 2;
         })
         .attr('y', function(d) {
-            return y(d.excess + d.excess_error) - 0.5 * barHeight
+            return y(d.excess_rate_per_h + d.excess_rate_err) - 0.5 * barHeight
         })
         .attr('width', function(d){
-            var barWidth = (x(d.endTime) - x(d.startTime));
+            var barWidth = (x(d.bin_end) - x(d.bin_start));
             var errorBarWidth = barWidth*0.6;
             return errorBarWidth
         })
@@ -183,18 +176,18 @@ function LightCurve(parentID, lightcurve) {
     selectedData.append('line')
         .attr('class', 'error')
         .attr('x1', function(d) {
-            var barWidth = (x(d.endTime) - x(d.startTime));
-            return x(d.startTime) + barWidth / 2;
+            var barWidth = (x(d.bin_end) - x(d.bin_start));
+            return x(d.bin_start) + barWidth / 2;
         })
         .attr('y1', function(d) {
-            return y(d.excess + d.excess_error) - 0.5 * barHeight
+            return y(d.excess_rate_per_h + d.excess_rate_err) - 0.5 * barHeight
         })
         .attr('x2', function(d) {
-            var barWidth = (x(d.endTime) - x(d.startTime));
-            return x(d.startTime) + barWidth / 2;
+            var barWidth = (x(d.bin_end) - x(d.bin_start));
+            return x(d.bin_start) + barWidth / 2;
         })
         .attr('y2', function(d) {
-            return y(d.excess - d.excess_error) - 0.5 * barHeight
+            return y(d.excess_rate_per_h - d.excess_rate_err) - 0.5 * barHeight
         });
 
     svg.append('g')

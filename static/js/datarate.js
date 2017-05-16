@@ -40,9 +40,7 @@ function DataRatePlot(parentID, data, radius=3, duration=900){
 
     //gray background
     svg.append("rect")
-        .style("fill", "#f8f8f8")
-        // .attr("x", x(earliestDate))
-        // .attr("y", y(100))
+        .attr("class", "plot background")
         .attr("width", width - margin.right - margin.left)
         .attr("height", height - margin.top - margin.bottom)
         .attr('transform', 'translate(0, 0)');

@@ -47,7 +47,7 @@ function LinePlot(parentID, data, width=600, height=320, color="steelblue", labe
 
     // add gray background
     svg.append("rect")
-        .style("fill", "#f8f8f8")
+        .attr("class", "plot background")
         .attr("width", width)
         .attr("height", height)
         .attr('transform', 'translate(0, 0)');

@@ -39,8 +39,9 @@ class Excess(Resource):
 
     def make_response(self, excess):
         excess = excess.drop(['run_start', 'run_stop', 'night'], axis=1)
-        excess['bin_start'] = excess['time_mean'] - excess['time_width'] * 0.5
-        excess['bin_end'] = excess['time_mean'] + excess['time_width'] * 0.5
+        excess['bin_start'] = excess.time_mean - excess.time_width * 0.5
+        excess['bin_end'] = excess.time_mean + excess.time_width * 0.5
+        excess = excess.drop(['time_mean', 'time_width'], axis=1)
         resp = Response(
                         response=excess.to_json(orient='records', date_format='iso'),
                         status=200,

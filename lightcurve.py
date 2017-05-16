@@ -46,7 +46,7 @@ def fetch_data(start, end, source=None):
 
     return runs, events
 
-def excess(runs, events, prediction_threshold=0.95, theta2_cut=0.02, bin_width_minutes=20):
+def excess(runs, events, prediction_threshold=0.9, theta2_cut=0.02, bin_width_minutes=20):
     s = analysis.calc_run_summary_source_independent(
         events,
         runs,

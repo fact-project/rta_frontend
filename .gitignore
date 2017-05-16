@@ -1,4 +1,4 @@
-./static/build/*
+static/build
 # Logs
 logs
 *.log

@@ -16,13 +16,13 @@ def fetch_data(start, end, source=None):
 
     query = FactRun.select() \
                     .where(FactRun.health == 'OK')\
-                    .where(FactRun.start_time >= start & FactRun.end_time <= end)
+                    .where(FactRun.start_time >= start)\
+                    .where(FactRun.end_time <= end)
 
     if source:
         query = query.where(FactRun.source == source)
 
     runs = pd.DataFrame(list(query.dicts()))
-
     query = Signal.select().where(Signal.event_timestamp >= start & Signal.analysis_timestamp <= end)
     events = pd.DataFrame(list(query.dicts()))
 

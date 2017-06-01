@@ -32,6 +32,12 @@ rect.plot.background{
     transform-origin: 35% 49%;
 }
 
+#datastatus{
+    font-size: 10pt;
+    margin-top: -1.8em;
+    color: #777777;
+}
+
 #status_display.online:after{
   font-family: FontAwesome;
   vertical-align: middle;

@@ -1,7 +1,8 @@
 /*
-	FACT RTA Frontend 2017
+  FACT RTA Frontend 2017
 
-  written by K.Bruegge. He knows nothing of JavaScript.
+  written by K.Bruegge. He knows nothing of JavaScript. But thats okay.
+
 */
 const $ = require('zeptojs');
 const Hexmap = require('hexmap');
@@ -29,11 +30,11 @@ function init() {
     var memPlot = new LinePlot('#memory_chart', data=[], width=300, height=260, color='red', label='Used Memory in MB');
     var loadPlot = new LinePlot('#load_chart', data=[], width=300, height=260, color='orange', label='Average Load');
     var ratePlot = new DataRatePlot('#datarate_chart', data=[], radius=3);
+    var excessPlot = new LightCurvePlot('#lightcurve', data=[])
 
     var webSocket = new WebSocket("ws://" + RTA_ADDRESS + "/rta");
 
     function loadSkyCamImage() {
-        console.log("loading allskycam iamge");
         $("#allskycam").attr("src", "./static/images/hex-loader2.gif");
         setTimeout(function () {
             console.log("loading allskycam img inner ");
@@ -43,21 +44,18 @@ function init() {
     }
 
     function get_excess() {
-      var jqxhr = $.getJSON( "/excess", function(data) {
-        console.log( "success" );
+      $.getJSON( "/v1/excess?bin_width=60", function(data) {
+        //parse date strings to datetime objects
         _.map(data, function (d){
           d.bin_start = iso.parse(d.bin_start)
           d.bin_end = iso.parse(d.bin_end)
           return d
         })
-        console.log( data );
-        $("#lightcurve .placeholder").css( "display", "none" )
-        var excessPlot = new LightCurvePlot('#lightcurve', data)
+        excessPlot.update(data)
       })
     }
 
     function check_rta_status(){
-      console.log("checking for rta status")
       if (webSocket.readyState == webSocket.CLOSED){
         $('#status_display').html("RTA is currently offline");
         $('#status_display').attr("class", "offline");
@@ -72,10 +70,10 @@ function init() {
     webSocket.onmessage = function (msg) {
         var data = JSON.parse(msg.data);
 
-        if (data.topic === "RUN_INFO"){
-            console.log("updating teh run ");
-            // update_run_info(data);
-        }
+        // if (data.topic === "RUN_INFO"){
+        //     console.log("updating teh run ");
+        //     // update_run_info(data);
+        // }
 
         if (data.topic === "DATA_RATE"){
             data.date = iso.parse(data.date);
@@ -84,8 +82,11 @@ function init() {
             ratePlot.update(data);
         }
 
-        if (data.topic === "STATUS"){
-            console.log("updating teh status");
+        if (data.topic === "DATA_STATUS"){
+            $('#datastatus').html(data.status);
+        }
+
+        if (data.topic === "MACHINE_STATUS"){
             data.date = iso.parse(data.timestamp);
             data.timestamp = iso.parse(data.timestamp);
 

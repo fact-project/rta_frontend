@@ -1,0 +1,6 @@
+pyfact==10.5
+Flask==0.12.1
+python-dateutil==2.5.3
+peewee==2.10.1
+numpy==1.12.1
+pandas==0.18.1

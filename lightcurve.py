@@ -1,12 +1,12 @@
 from rta_model import Signal, FactRun
 from fact import analysis, instrument
-from fact import  plotting
 import pandas as pd
+from fact import plotting
 import matplotlib.pyplot as plt
-import click
 import dateutil.parser
 
 theta_off_keys = ['theta_off_{}'.format(i) for i in range(1, 6)]
+
 
 def fetch_data(start, end, source=None):
 
@@ -46,6 +46,7 @@ def fetch_data(start, end, source=None):
 
     return runs, events
 
+
 def excess(runs, events, prediction_threshold=0.9, theta2_cut=0.02, bin_width_minutes=20):
     s = analysis.calc_run_summary_source_independent(
         events,
@@ -64,6 +65,7 @@ def excess(runs, events, prediction_threshold=0.9, theta2_cut=0.02, bin_width_mi
 
     return d
 
+
 def main():
 
     start = dateutil.parser.parse('2013-11-03')
@@ -71,10 +73,9 @@ def main():
 
     events, runs = fetch_data(start, end)
     d = excess(runs, events)
-    import IPython; IPython.embed()
 
-    # plotting.analysis.plot_excess_rate(d)
-    # plt.show()
+    plotting.analysis.plot_excess_rate(d)
+    plt.show()
 
 
 if __name__ == '__main__':

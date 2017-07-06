@@ -1,10 +1,19 @@
-from peewee import *
+from peewee import SqliteDatabase, Model, IntegerField, CharField, FloatField, DateTimeField, CompositeKey, ForeignKeyField
+import os
 
-database = SqliteDatabase('../fact-tools/rta.sqlite', **{})
+path = os.environ.get('RTA_SQLITE_PATH', '/scratch/rta/rta.sqlite')
+print('Path to the sqlite db is {}'.format(path))
+if not os.access(path, os.W_OK):
+    print('Could not read sqlite file')
+    raise IOError('could not read sqlite file')
+
+database = SqliteDatabase(path, **{})
+
 
 class BaseModel(Model):
     class Meta:
         database = database
+
 
 class FactRun(BaseModel):
     end_time = DateTimeField(null=True)
@@ -21,6 +30,7 @@ class FactRun(BaseModel):
             (('night', 'run'), True),
         )
         primary_key = CompositeKey('night', 'run')
+
 
 class Signal(BaseModel):
     analysis_timestamp = DateTimeField(null=True)

@@ -16,7 +16,7 @@ const LightCurvePlot = require('./lightcurve.js');
 SECONDS = 1000;
 MINUTES = 60*SECONDS;
 
-var RTA_ADDRESS = "localhost:4567"
+var RTA_ADDRESS = "161.72.93.138:4567"
 
 
 $(document).ready(init);

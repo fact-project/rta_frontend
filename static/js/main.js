@@ -16,7 +16,7 @@ const LightCurvePlot = require('./lightcurve.js');
 SECONDS = 1000;
 MINUTES = 60*SECONDS;
 
-var RTA_ADDRESS = "localhost:4567"
+var RTA_ADDRESS = "161.72.93.138:4567"
 
 
 $(document).ready(init);
@@ -46,11 +46,13 @@ function init() {
     function get_excess() {
       $.getJSON( "/v1/excess?bin_width=60", function(data) {
         //parse date strings to datetime objects
-        _.map(data, function (d){
+        console.log(data)
+	_.map(data, function (d){
           d.bin_start = iso.parse(d.bin_start)
           d.bin_end = iso.parse(d.bin_end)
           return d
         })
+	console.log(data)
         excessPlot.update(data)
       })
     }

@@ -48,6 +48,9 @@ def fetch_data(start, end, source=None):
 
 
 def excess(runs, events, prediction_threshold=0.9, theta2_cut=0.02, bin_width_minutes=20):
+    if events.empty:
+        return pd.DataFrame()
+
     s = analysis.calc_run_summary_source_independent(
         events,
         runs,
@@ -69,11 +72,16 @@ def excess(runs, events, prediction_threshold=0.9, theta2_cut=0.02, bin_width_mi
 def main():
 
     start = dateutil.parser.parse('2013-11-03')
-    end = dateutil.parser.parse('2013-11-04')
+    end = dateutil.parser.parse('2023-11-04')
 
-    events, runs = fetch_data(start, end)
-    d = excess(runs, events)
+    runs, events = fetch_data(start, end)
 
+    d = excess(runs, events, bin_width_minutes=60)
+
+    if d.empty:
+        print('No events in db for given period')
+        return
+        
     plotting.analysis.plot_excess_rate(d)
     plt.show()
 

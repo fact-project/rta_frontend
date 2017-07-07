@@ -1,6 +1,6 @@
 from flask import Flask
-from flask import render_template, Response, jsonify, request
-from  datetime import datetime
+from flask import render_template, Response, request
+from datetime import datetime
 import lightcurve
 from dateutil import parser
 
@@ -13,6 +13,7 @@ def _make_response_for_invalid_request(message):
                 status=400,
                 mimetype='application/json'
             )
+
 
 @app.route('/v1/excess', methods=['GET'])
 def rta():
@@ -35,7 +36,7 @@ def rta():
     except ValueError:
         return _make_response_for_invalid_request('Could not parse bin width')
 
-    source = args.get('source', 'Crab')
+    source = args.get('source', None)
 
     print(start_date)
     runs, events = lightcurve.fetch_data(start=start_date, end=latest_date, source=source)

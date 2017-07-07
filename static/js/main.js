@@ -83,6 +83,7 @@ function init() {
         }
 
         if (data.topic === "DATA_STATUS"){
+            console.log("updating data_status field")
             $('#datastatus').html(data.status);
         }
 

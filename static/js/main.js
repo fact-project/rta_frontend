@@ -108,9 +108,10 @@ function init() {
 
 
         if (data.topic === "EVENT"){
+	    console.log(data)
             camera.update(data.photonCharges, duration=500);
             $('#source_name').html(data.sourceName);
-            $('#event_timestamp').html(iso.parse(data.eventTimeStamp).toUTCString().replace("GMT", "UTC"));
+            $('#event_time_stamp').html(iso.parse(data.dateString));
             $('#size').html(numeral(data.size).format('0.00'));
             $('#energy').html(numeral(data.estimatedEnergy).format('0.00') + " GeV");
             $('#theta_square').html(numeral(data.thetaSquare).format('0.00'));

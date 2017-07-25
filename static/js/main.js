@@ -25,10 +25,13 @@ function init() {
 
     var iso = d3.time.format.iso;
     var utc = d3.time.format.utc;
-
-    var camera   = new Hexmap('fact_map', 450, 5);
-    var memPlot = new LinePlot('#memory_chart', data=[], width=300, height=260, color='red', label='Used Memory in MB');
-    var loadPlot = new LinePlot('#load_chart', data=[], width=300, height=260, color='orange', label='Average Load');
+    if ($(window).width() < 960){
+      var camera   = new Hexmap('fact_map', 350, 4);
+    } else {
+      var camera   = new Hexmap('fact_map', 450, 5);
+    }
+    var memPlot = new LinePlot('#memory_chart', data=[], width=580, height=500, color='red', label='Used Memory in MB');
+    var loadPlot = new LinePlot('#load_chart', data=[], width=580, height=500, color='orange', label='Average Load');
     var ratePlot = new DataRatePlot('#datarate_chart', data=[], radius=3);
     var excessPlot = new LightCurvePlot('#lightcurve', data=[])
 
@@ -42,7 +45,7 @@ function init() {
             console.log("loading allskycam img inner ");
             d = new Date();
             $("#allskycam").attr("src", "http://www.gtc.iac.es/multimedia/netcam/camaraAllSky.jpg?" + d.getTime());
-        }, 4000);
+        }, 14000);
     }
 
     function get_excess() {

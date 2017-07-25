@@ -1,16 +1,13 @@
 const d3 = require('d3');
 const _ = require('lodash');
 
-function LinePlot(parentID, data, width=600, height=320, color="steelblue", label="y-label"){
+function LinePlot(parentID, data, width=400, height=400, color="steelblue", label="y-label"){
     // Set the dimensions of the canvas / graph
-    var margin = {top: 15, right:0, bottom: 20, left: 40},
-        width = width - margin.left - margin.right,
-        height = height - margin.top - margin.bottom;
-
+    var margin = {top: 0, right:0, bottom: 30, left: 40}
 
     // Set the ranges
-    var x = d3.time.scale().range([0, width]);
-    var y = d3.scale.linear().range([height, 0]);
+    var x = d3.time.scale().range([0, width - margin.left - margin.right]);
+    var y = d3.scale.linear().range([height - margin.top - margin.bottom, 0]);
 
     // Define the axes
     var xAxis = d3.svg.axis().scale(x)
@@ -31,25 +28,32 @@ function LinePlot(parentID, data, width=600, height=320, color="steelblue", labe
             return y(d.value);
         });
 
+        var y = d3.scale.linear()
+            .domain([0, 100])
+            .range([height - margin.top - margin.bottom, 0]);
+
 
     // Scale the range of the data
     x.domain([0, 10]);
     y.domain([0, d3.max(data, function(d) { return d.value; })]);
 
     // Adds the svg canvas
-    var svg = d3.select(parentID)
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
+    var svg = d3.select(parentID).append('div')
+        .classed("svg-container", true) //container class to make it responsive
+      .append('svg')
+        .attr('class', 'chart')
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", "0 0 " + width + " " + height)
+        .classed("svg-content-responsive", true)
+      .append("g")
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
 
     // add gray background
     svg.append("rect")
         .attr("class", "plot background")
-        .attr("width", width)
-        .attr("height", height)
+        .attr("width", width - margin.right - margin.left)
+        .attr("height", height - margin.top - margin.bottom)
         .attr('transform', 'translate(0, 0)');
 
 
@@ -60,10 +64,10 @@ function LinePlot(parentID, data, width=600, height=320, color="steelblue", labe
         .attr("d", valueline(data));
 
     // Add the X Axis
-    svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
+    svg.append('g')
+        .attr('class', 'x axis')
+        .attr('transform', 'translate(0, ' + (height - margin.top - margin.bottom) + ')')
+        .call(xAxis)
 
     // Add the Y Axis
     svg.append("g")

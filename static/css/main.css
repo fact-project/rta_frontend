@@ -2,13 +2,17 @@
 make d3 svgs responsive.
 see https://stackoverflow.com/questions/16265123/resize-svg-when-window-is-resized-in-d3-js
 */
-.svg-container {
+.svg-container{
     display: inline-block;
     position: relative;
     width: 100%;
-    padding-bottom: 65%; /* aspect ratio */
+    padding-bottom: 100%; /* aspect ratio */
     vertical-align: top;
     overflow: hidden;
+}
+
+.svg-container.wide{
+    padding-bottom: 60%; /* aspect ratio */
 }
 .svg-content-responsive {
     display: inline-block;
@@ -35,9 +39,14 @@ a {
 }
 
 /*some styling for different screen sizes.
-by default containers on small devices are only 85% wide. */
-/* For devices larger than 400px */
-@media (min-width: 400px) {
+/* For devices smaller than 400px */
+@media (max-width: 600px) {
+  #eventinfo table{
+    margin: auto;
+  }
+  .spotlight .figure {
+    padding-right: 1em;
+  }
   .spotlight   p {
       margin-right: 0.5em;
       margin-left: 0.5em;
@@ -46,12 +55,14 @@ by default containers on small devices are only 85% wide. */
       margin-top: 0.2em;
       margin-left: 0.2em;
   }
+
+  /*by default containers on small devices are only 85% wide. */
   .container {
     width: 98%;
     padding: 0;
   }
   #fact_map {
-  	margin-left:-0.4em;
+  	text-align: center;
   }
 
   #lightcurve .placeholder{
@@ -59,7 +70,6 @@ by default containers on small devices are only 85% wide. */
     width: 380px;
     height: 200px;
   }
-
 }
 
 

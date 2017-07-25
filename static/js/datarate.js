@@ -32,7 +32,7 @@ function DataRatePlot(parentID, data, radius=3, duration=900){
         .tickPadding(8);
 
     var svg = d3.select(parentID).append('div')
-        .classed("svg-container", true) //container class to make it responsive
+        .classed("svg-container wide", true) //container class to make it responsive
       .append('svg')
         .attr('class', 'chart')
         .attr("preserveAspectRatio", "xMinYMin meet")

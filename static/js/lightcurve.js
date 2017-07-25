@@ -94,7 +94,7 @@ function LightCurve(parentID, lightcurve) {
         .tickPadding(8);
 
     var svg = d3.select(parentID).append('div')
-        .classed("svg-container", true) //container class to make it responsive
+        .classed("svg-container wide", true) //container class to make it responsive
       .append('svg')
         .attr('class', 'chart')
         .attr("preserveAspectRatio", "xMinYMin meet")

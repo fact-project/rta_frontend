@@ -31,10 +31,13 @@ function DataRatePlot(parentID, data, radius=3, duration=900){
         .orient('left')
         .tickPadding(8);
 
-    var svg = d3.select(parentID).append('svg')
+    var svg = d3.select(parentID).append('div')
+        .classed("svg-container", true) //container class to make it responsive
+      .append('svg')
         .attr('class', 'chart')
-        .attr('width', width)
-        .attr('height', height)
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", "0 0 " + width + " " + height)
+        .classed("svg-content-responsive", true)
         .append('g')
         .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
 

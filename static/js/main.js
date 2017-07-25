@@ -33,7 +33,8 @@ function init() {
     var excessPlot = new LightCurvePlot('#lightcurve', data=[])
 
     console.log('Starting RTA frontend on ' + location.host)
-    var webSocket = new WebSocket("ws://" + location.host + "/rta");
+    console.log('Connecting websockets to ' + location.hostname + ':4567')
+    var webSocket = new WebSocket("ws://" + location.hostname + ":4567/rta");
 
     function loadSkyCamImage() {
         $("#allskycam").attr("src", "./static/images/hex-loader2.gif");
@@ -112,7 +113,7 @@ function init() {
 	    console.log(data)
             camera.update(data.photonCharges, duration=500);
             $('#source_name').html(data.sourceName);
-            $('#event_time_stamp').html(iso.parse(data.dateString));
+            $('#event_timestamp').html(iso.parse(data.dateString));
             $('#size').html(numeral(data.size).format('0.00'));
             $('#energy').html(numeral(data.estimatedEnergy).format('0.00') + " GeV");
             $('#theta_square').html(numeral(data.thetaSquare).format('0.00'));

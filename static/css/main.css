@@ -1,3 +1,30 @@
+/*
+make d3 svgs responsive.
+see https://stackoverflow.com/questions/16265123/resize-svg-when-window-is-resized-in-d3-js
+*/
+.svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 65%; /* aspect ratio */
+    vertical-align: top;
+    overflow: hidden;
+}
+.svg-content-responsive {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 0;
+}
+/*style the plot background*/
+rect.plot.background{
+  fill:#f8f8f8
+}
+
+
+/*
+align links that use font awesome. apperently some chrome bug
+*/
 i.fa{
     vertical-align: middle;
     padding-right:0.7em;
@@ -7,9 +34,34 @@ a {
     color:#888888;
 }
 
-rect.plot.background{
-  fill:#f8f8f8
+/*some styling for different screen sizes.
+by default containers on small devices are only 85% wide. */
+/* For devices larger than 400px */
+@media (min-width: 400px) {
+  .spotlight   p {
+      margin-right: 0.5em;
+      margin-left: 0.5em;
+  }
+  .spotlight   h3 {
+      margin-top: 0.2em;
+      margin-left: 0.2em;
+  }
+  .container {
+    width: 98%;
+    padding: 0;
+  }
+  #fact_map {
+  	margin-left:-0.4em;
+  }
+
+  #lightcurve .placeholder{
+    display:block;
+    width: 380px;
+    height: 200px;
+  }
+
 }
+
 
 #lightcurve .placeholder{
   display:block;
@@ -55,20 +107,18 @@ rect.plot.background{
 .spotlight {
     background-color: white;
     margin-bottom: 2em;
-    margin-left: -2em;
-    margin-right: -2em;
 }
 
 .spotlight   h3 {
     margin-top: 0.2em;
 }
 .spotlight   p {
-    margin-right: 2em;
+    margin-right: 1.5em;
+    margin-left: 0.5em;
 }
 .spotlight .row img {
     display: block;
     padding: 1em;
-    /*width: 300px;*/
 }
 
 /*datarate plot*/
@@ -104,16 +154,14 @@ rect.plot.background{
 }
 
 
-#fact_map {
-	margin-left:4em;
-}
+
 
 body {
     background-color: #eee;
 }
 
 section {
-    margin-bottom: 2em;
+    margin-bottom: 1.5em;
 }
 
 
@@ -151,7 +199,6 @@ section {
 	color:#bbbbbb;
   size: 6pt;
 	background-color:#444;
-	margin-left:2em;
 	padding:0;
 }
 

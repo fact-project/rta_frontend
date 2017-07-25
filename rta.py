@@ -3,7 +3,7 @@ from flask import render_template, Response, request
 from datetime import datetime
 import lightcurve
 from dateutil import parser
-from dateutil import relativedelta
+from dateutil.relativedelta import relativedelta
 
 app = Flask(__name__)
 

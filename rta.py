@@ -3,6 +3,7 @@ from flask import render_template, Response, request
 from datetime import datetime
 import lightcurve
 from dateutil import parser
+from dateutil import relativedelta
 
 app = Flask(__name__)
 
@@ -20,8 +21,12 @@ def rta():
     args = request.args
 
     try:
-        start_date = parser.parse(args.get('start_date', '2013-01-01'), fuzzy=True)
-        start_date = start_date.isoformat()
+        d = args.get('start_date', None)
+        if d:
+            start_date = parser.parse(d, fuzzy=True).isoformat()
+        else:
+            start_date = (datetime.now() - relativedelta(hours=12)).isoformat()
+
     except ValueError:
         return _make_response_for_invalid_request('Could not parse start date')
 
@@ -62,5 +67,5 @@ def rta():
 
 @app.route('/')
 def hello():
-    title='FACT Real Time Analysis'
+    title = 'FACT Real Time Analysis'
     return render_template('index.html', title=title)

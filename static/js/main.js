@@ -32,7 +32,8 @@ function init() {
     var ratePlot = new DataRatePlot('#datarate_chart', data=[], radius=3);
     var excessPlot = new LightCurvePlot('#lightcurve', data=[])
 
-    var webSocket = new WebSocket("ws://" + RTA_ADDRESS + "/rta");
+    console.log('Starting RTA frontend on ' + location.host)
+    var webSocket = new WebSocket("ws://" + location.host + "/rta");
 
     function loadSkyCamImage() {
         $("#allskycam").attr("src", "./static/images/hex-loader2.gif");

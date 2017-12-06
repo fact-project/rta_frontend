@@ -19,7 +19,7 @@ class FactRun(BaseModel):
     end_time = DateTimeField(null=True)
     health = CharField(null=True)
     night = IntegerField()
-    on_time = FloatField(null=True)
+    ontime_seconds = FloatField(null=True)
     run = IntegerField(db_column='run_id')
     source = CharField(null=True)
     start_time = DateTimeField(null=True)

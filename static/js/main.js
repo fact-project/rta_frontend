@@ -51,15 +51,15 @@ function init() {
     function get_excess() {
       $.getJSON( "/v1/excess?bin_width=60", function(data) {
         //parse date strings to datetime objects
-        console.log(data)
-	_.map(data, function (d){
-          d.bin_start = iso.parse(d.bin_start)
-          d.bin_end = iso.parse(d.bin_end)
-          return d
-        })
-	console.log(data)
-        excessPlot.update(data)
-      })
+          console.log(data)
+	        _.map(data, function (d){
+            d.bin_start = iso.parse(d.bin_start)
+            d.bin_end = iso.parse(d.bin_end)
+            return d
+          })
+          console.log(data)
+          excessPlot.update(data)
+      });
     }
 
     function check_rta_status(){
@@ -76,54 +76,53 @@ function init() {
 
     webSocket.onmessage = function (msg) {
         var data = JSON.parse(msg.data);
-
-        // if (data.topic === "RUN_INFO"){
-        //     console.log("updating teh run ");
-        //     // update_run_info(data);
-        // }
-
-        if (data.topic === "DATA_RATE"){
-            data.date = iso.parse(data.date);
-            data.timestamp = iso.parse(data.timestamp);
-            $('#datarate').html(numeral(data.rate).format('0.0'));
-            ratePlot.update(data);
-        }
-
-        if (data.topic === "DATA_STATUS"){
-            console.log("updating data_status field")
-            $('#datastatus').html(data.status);
-        }
-
-        if (data.topic === "MACHINE_STATUS"){
-            data.date = iso.parse(data.timestamp);
-            data.timestamp = iso.parse(data.timestamp);
-
-            $('#space').html(numeral(data.freeSpace / (1024*1024*1024)).format('0.00'));
-            $('#memory').html(numeral(data.usedMemory/ (1024*1024)).format('0.00'));
-            $('#cpus').html(numeral(data.availableProcessors).format('0'));
-
-            data.value = data.usedMemory/ (1024*1024);
-            memPlot.update(data);
-
-            //do a shallow clone
-            var copy = Object.assign({}, data);
-            copy.value = data.loadAverage;
-            loadPlot.update(copy);
-        }
-
-
-        if (data.topic === "EVENT"){
-	    console.log(data)
-            camera.update(data.photonCharges, duration=500);
-            $('#source_name').html(data.sourceName);
-            $('#event_timestamp').html(iso.parse(data.dateString));
-            $('#size').html(numeral(data.size).format('0.00'));
-            $('#energy').html(numeral(data.estimatedEnergy).format('0.00') + " GeV");
-            $('#theta_square').html(numeral(data.thetaSquare).format('0.00'));
-        }
+        // console.log("Recieved Message")
+        //execute once every 250 ms.
+        var debounced_update = _.debounce(update_view, 250, { 'leading': true, 'trailing': false });
+        debounced_update(data)
     };
 
+    function update_view(data){
+      if (data.topic === "DATA_RATE"){
+          data.date = iso.parse(data.date);
+          data.timestamp = iso.parse(data.timestamp);
+          $('#datarate').html(numeral(data.rate).format('0.0'));
+          ratePlot.update(data);
+      }
 
+      if (data.topic === "DATA_STATUS"){
+          console.log("updating data_status field")
+          $('#datastatus').html(data.status);
+      }
+
+      if (data.topic === "MACHINE_STATUS"){
+          data.date = iso.parse(data.timestamp);
+          data.timestamp = iso.parse(data.timestamp);
+
+          $('#space').html(numeral(data.freeSpace / (1024*1024*1024)).format('0.00'));
+          $('#memory').html(numeral(data.usedMemory/ (1024*1024)).format('0.00'));
+          $('#cpus').html(numeral(data.availableProcessors).format('0'));
+
+          data.value = data.usedMemory/ (1024*1024);
+          memPlot.update(data);
+
+          //do a shallow clone
+          var copy = Object.assign({}, data);
+          copy.value = data.loadAverage;
+          loadPlot.update(copy);
+      }
+
+
+      if (data.topic === "EVENT"){
+          console.log(data)
+          camera.update(data.photonCharges, duration=500);
+          $('#source_name').html(data.sourceName);
+          $('#event_timestamp').html(iso.parse(data.dateString));
+          $('#size').html(numeral(data.size).format('0.00'));
+          $('#energy').html(numeral(data.estimatedEnergy).format('0.00') + " GeV");
+          $('#theta_square').html(numeral(data.thetaSquare).format('0.00'));
+      }
+    }
 
     loadSkyCamImage();
     window.setInterval(loadSkyCamImage, 5*MINUTES);
